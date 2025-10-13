@@ -1,0 +1,25 @@
+# Executavel da API
+cpf-management
+
+# Arquivos de IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Diretórios de build
+bin/
+pkg/
+
+# Dependências e cache
+vendor/
+
+# Relatórios de cobertura de testes
+*.coverprofile
+
+# Logs
+*.log
+
+# Arquivos de configuração de ambiente e segredos
+.env
+.local
+config.local.json

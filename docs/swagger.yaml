@@ -1,0 +1,226 @@
+basePath: /api/v1/products
+definitions:
+  dto.OutputDefault:
+    properties:
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  dto.Request:
+    properties:
+      classificacao:
+        type: string
+      descricao:
+        type: string
+      especificacao:
+        type: string
+      id:
+        type: string
+      nome:
+        type: string
+      preco:
+        type: number
+      url_imagem:
+        type: string
+    type: object
+  dto.Response:
+    properties:
+      classificacao:
+        type: string
+      created_at:
+        type: string
+      descricao:
+        type: string
+      especificacao:
+        type: string
+      id:
+        type: string
+      nome:
+        type: string
+      preco:
+        type: number
+      updated_at:
+        type: string
+      url_imagem:
+        type: string
+    type: object
+  dto.ResponseManyPaginated:
+    properties:
+      currentPage:
+        type: integer
+      itemsPerPage:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/dto.Response'
+        type: array
+      totalItems:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+host: 192.168.37.143:8888
+info:
+  contact: {}
+  description: Está API gerencia detalhes de produtos.
+  title: Product Details API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Retorna uma lista de produtos, paginada
+      parameters:
+      - description: Numero da página a ser retornada
+        in: query
+        name: page
+        type: integer
+      - description: Quantidade de itens na página a ser retornada
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseManyPaginated'
+            type: array
+        "500":
+          description: Erro interno do servidor
+          schema:
+            type: string
+      summary: Lista todos os produtos
+      tags:
+      - produtos
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo produto com os dados fornecidos
+      parameters:
+      - description: Dados do produto a ser criado
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Erro na requisição
+          schema:
+            type: string
+      summary: Cria um novo produto
+      tags:
+      - produtos
+  /{id}:
+    delete:
+      description: Deleta um produto específico com base no ID fornecido
+      parameters:
+      - description: ID do produto a ser deletado
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Produto deletado com sucesso"}
+          schema:
+            $ref: '#/definitions/dto.OutputDefault'
+        "404":
+          description: produto não encontrado
+          schema:
+            type: string
+      summary: Deleta um produto pelo ID
+      tags:
+      - produtos
+    get:
+      consumes:
+      - application/json
+      description: Retorna um produto específico com base no ID fornecido
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.OutputDefault'
+      summary: Retorna um produto pelo ID
+      tags:
+      - produtos
+    put:
+      consumes:
+      - application/json
+      description: Atualiza um produto existente com base no ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados do produto para atualização
+        in: body
+        name: produto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.OutputDefault'
+      summary: Atualiza um produto pelo ID
+      tags:
+      - produtos
+  /compare:
+    get:
+      description: Retorna uma lista de produtos com base nos IDs fornecidos em um
+        formato de lista separada por vírgulas
+      parameters:
+      - description: 'IDs dos produtos a serem comparados (ex: 0d605862-91e8-11f0-9140-00155d6d572f,034aeff8-90ea-11f0-95f2-00155d6d5ec0,034afa35-90ea-11f0-95f2-00155d6d5ec0,034b11f9-90ea-11f0-95f2-00155d6d5ec0)'
+        in: query
+        name: ids
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseManyPaginated'
+            type: array
+        "400":
+          description: Requisição inválida
+          schema:
+            type: string
+      summary: Compara múltiplos produtos por uma lista de IDs
+      tags:
+      - produtos
+swagger: "2.0"

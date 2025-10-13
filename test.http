@@ -1,0 +1,49 @@
+### Variables
+@URL = http://localhost:8889
+@APIURL = {{URL}}/api/v1/cliente
+
+### ping da API
+GET {{URL}}/ping
+
+### Get cliente por ID não encontrado
+GET {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
+Accept: application/json
+
+### Get cliente por ID encontrado
+GET {{APIURL}}/0d605862-91e8-11f0-9140-00155d6d572f
+Accept: application/json
+
+### Get todos os clientes
+GET {{APIURL}}/
+Accept: application/json
+
+### Get todos os clientes com paginação
+GET {{APIURL}}?page=1&limit=2
+Accept: application/json
+
+### Adicionar um cliente
+POST {{APIURL}}/
+Content-Type: application/json
+
+{
+    "nome": "cliente 1",
+    "documento": "71248609972",
+    "telefone": "48999448383",
+    "bloqueado": false
+}
+
+### Deleta um cliente
+DELETE {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
+Content-Type: application/json
+
+### Alterar um cliente
+PUT {{APIURL}}/0621c52e-91f4-11f0-abfa-00155d6d572f
+Content-Type: application/json
+
+{
+    "id": "0621c52e-91f4-11f0-abfa-00155d6d572f",
+    "nome": "cliente 333",
+    "documento": "71248609972",
+    "telefone": "48999448383",
+    "bloqueado": false
+}
