@@ -41,27 +41,10 @@ func main() {
 		os.Exit(1)
 	}
 	db := client.Database("cpf_management")
-	//_ = db.Collection("clientes")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	defer database.DisconnectDB(log, client, ctx)
 	fmt.Println("Iniciou Database...")
-
-	//db := database.Conexao.Database("cpf_management")
-	//_ = db.Collection("clientes")
-
-	/* repoClientes, err := repository.NewClienteRepo("infra/database/clientes.json")
-	if err != nil {
-		log.Debug(err.Error())
-		fmt.Printf("Erro ao iniciar database: %v", err)
-		os.Exit(1)
-	}
-	err = datafake.GerarProdutosFake(repoClientes, 10)
-	if err != nil {
-		log.Debug(err.Error())
-		fmt.Printf("Erro ao gerar dados fake: %v", err)
-		os.Exit(1)
-	} */
 
 	gin.DefaultWriter = io.Discard // Desabilita o log padrão do gin jogando para o io.Discard
 	router := gin.Default()

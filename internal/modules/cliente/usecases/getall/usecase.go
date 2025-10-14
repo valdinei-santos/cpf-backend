@@ -8,9 +8,9 @@ import (
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/infra/repository"
 )
 
-// UseCase - Estrutura para o caso de uso de criação de produto
+// UseCase - Estrutura para o caso de uso de criação de cliente
 type UseCase struct {
-	repo repository.IClienteRepository // Interface do repositório para Produto
+	repo repository.IClienteRepository
 	log  logger.ILogger
 }
 
@@ -33,7 +33,7 @@ func NewUseCase(r repository.IClienteRepository, l logger.ILogger) *UseCase {
 // @Router         / [get]
 // Execute - Executa a lógica para buscar todos os clientes
 func (u *UseCase) Execute(page int64, size int64) (*dto.ResponseManyPaginated, error) {
-	u.log.Debug("Entrou create.Execute")
+	u.log.Debug("Entrou getall.Execute")
 
 	// Calcula o offset para o repositório
 	offset := (page - 1) * size

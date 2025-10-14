@@ -17,8 +17,8 @@ services:
     build: 
       context: . 
       dockerfile: Dockerfile 
-    image: cpf-management/cpf-backend:1.0.0
-    container_name: cpf-backend
+    image: cpf-management/backend:1.0.0
+    container_name: backend
     restart: on-failure
     ports:
       - "0.0.0.0:8889:8800"
@@ -35,7 +35,7 @@ services:
   
 networks:
   mongo-network:
-    driver: bridge      
+    driver: bridge
 volumes:
   mongo-data:
     driver: local

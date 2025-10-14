@@ -11,13 +11,14 @@ import (
 
 // Cliente representa a estrutura de um cliente
 type Cliente struct {
-	ID        uuid.UUID
-	Nome      vo.NomeCliente
-	Documento vo.DocumentoCliente
-	Telefone  vo.TelefoneCliente
-	Bloqueado vo.BloqueadoCliente
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	//ID        uuid.UUID           `bson:"_id"`
+	ID        vo.ID               `bson:"id"`
+	Nome      vo.NomeCliente      `bson:"nome"`
+	Documento vo.DocumentoCliente `bson:"documento"`
+	Telefone  vo.TelefoneCliente  `bson:"telefone"`
+	Bloqueado vo.BloqueadoCliente `bson:"bloqueado"`
+	CreatedAt time.Time           `bson:"created_at"`
+	UpdatedAt time.Time           `bson:"updated_at"`
 }
 
 // NewCliente - cria uma nova instância de Cliente
@@ -44,7 +45,7 @@ func NewCliente(nome, documento, telefone string, bloqueado bool) (*Cliente, err
 	}
 
 	c := &Cliente{
-		ID:        uuidVO,
+		ID:        vo.FromUUID(uuidVO),
 		Nome:      nomeVO,
 		Documento: documentoVO,
 		Telefone:  telefoneVO,
@@ -83,7 +84,7 @@ func UpdateCliente(id, nome, documento, telefone string, bloqueado bool, created
 		return nil, err
 	}
 	c := &Cliente{
-		ID:        idUUID,
+		ID:        vo.FromUUID(idUUID),
 		Nome:      nomeVO,
 		Documento: documentoVO,
 		Telefone:  telefoneVO,

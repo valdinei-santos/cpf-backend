@@ -8,7 +8,7 @@ import (
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/infra/repository"
 )
 
-// UseCase - Estrutura para o caso de uso de criação de produto
+// UseCase - Estrutura para o caso de uso de criação de cliente
 type UseCase struct {
 	repo repository.IClienteRepository
 	log  logger.ILogger
@@ -31,7 +31,7 @@ func NewUseCase(r repository.IClienteRepository, l logger.ILogger) *UseCase {
 // @Success      201 {object} dto.Response
 // @Failure      400 {object} string "Erro na requisição"
 // @Router       / [post]
-// Execute - Executa a lógica de criação de um produto
+// Execute - Executa a lógica de criação de um cliente
 func (u *UseCase) Execute(in *dto.Request) (*dto.Response, error) {
 	u.log.Debug("Entrou create.Execute")
 

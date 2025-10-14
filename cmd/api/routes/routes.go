@@ -16,40 +16,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// AccessCounterMiddleware -- Middleware para Contar Acessos
-func AccessCounterMiddleware(c *gin.Context) {
-	// Usa o path da rota para contagem. Ex: /api/v1/cpfs
-	stats.GlobalStats.Increment(c.Request.URL.Path)
-	c.Next() // Processa o restante da requisição
-}
-
-// GetStatsHandler -- Função Handler para exibir as estatísticas
-func GetStatsHandler(c *gin.Context) {
-	statsData := stats.GlobalStats.GetStats()
-	uptime := time.Since(stats.GlobalStats.StartTime).Round(time.Second).String()
-
-	c.JSON(http.StatusOK, gin.H{
-		"status":        "success",
-		"uptime":        uptime,
-		"access_counts": statsData,
-	})
-}
-
 func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database) {
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:8888", "http://127.0.0.1:8888"}, // Para liberar o Swagger
-		// OU use AllowAllOrigins: true para permitir TUDO (apenas para DEV/TESTE)
-
+		//AllowAllOrigins: true,
+		AllowOrigins:     []string{"http://192.168.37.143:8888", "http://localhost:8888", "http://127.0.0.1:8888"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour, // Limita tempo navegador pode armazenar em cache as informações do preflight
+		MaxAge:           12 * time.Hour,
 	}))
 	// ---------------------------
 
 	router.Use(AccessCounterMiddleware) // Adicionar o Middleware de Contagem antes de todas as rotas
-	router.GET("/stats", GetStatsHandler)
+	router.GET("/status", GetStatusHandler)
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
@@ -57,7 +37,20 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 	v1 := router.Group("/api/v1")
 	prod := v1.Group("/cliente")
 
-	prod.POST("/", func(c *gin.Context) {
+	prod.OPTIONS("", func(c *gin.Context) {
+		c.Status(204)
+		// O middleware CORS (que já foi aplicado no router) DEVE injetar os headers
+	})
+
+	prod.POST("", func(c *gin.Context) {
+		// Para saber algumas informações que vem no Header que o CORS se importa
+		// origin := c.GetHeader("Origin")
+		// host := c.GetHeader("X-Forwarded-Host")
+		// realHost := c.Request.Host
+		// fmt.Printf("CORS DEBUG: Origin Header: %s\n", origin)
+		// fmt.Printf("CORS DEBUG: X-Forwarded-Host Header: %s\n", host)
+		// fmt.Printf("CORS DEBUG: Request Host (Go): %s\n", realHost)
+
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
 		cliente.StartCreate(log, c, db)
 	})
@@ -72,9 +65,14 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 		cliente.StartGet(log, c, db)
 	})
 
-	prod.GET("/", func(c *gin.Context) {
+	prod.GET("", func(c *gin.Context) {
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
 		cliente.StartGetAll(log, c, db)
+	})
+
+	prod.OPTIONS("/:id", func(c *gin.Context) {
+		// Isso garante que o Preflight Request seja recebido e respondido com 204.
+		c.Status(204)
 	})
 
 	prod.PUT("/:id", func(c *gin.Context) {
@@ -84,4 +82,23 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
+}
+
+// AccessCounterMiddleware -- Middleware para Contar Acessos
+func AccessCounterMiddleware(c *gin.Context) {
+	// Usa o path da rota para contagem. Ex: /api/v1/cpfs
+	stats.GlobalStats.Increment(c.Request.URL.Path)
+	c.Next() // Processa o restante da requisição
+}
+
+// GetStatsHandler -- Função Handler para exibir as estatísticas
+func GetStatusHandler(c *gin.Context) {
+	statsData := stats.GlobalStats.GetStats()
+	uptime := time.Since(stats.GlobalStats.StartTime).Round(time.Second).String()
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":        "success",
+		"uptime":        uptime,
+		"access_counts": statsData,
+	})
 }

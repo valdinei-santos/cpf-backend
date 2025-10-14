@@ -6,7 +6,7 @@ var (
 	ErrDuplicatekey         = errors.New("chave duplicada")
 	ErrNotFound             = errors.New("não encontrado")
 	ErrNotNil               = errors.New("não pode ser nil")
-	ErrBadRequest           = errors.New("erro nos dados do response")
+	ErrBadRequest           = errors.New("erro nos dados do request")
 	ErrSaveInDatabase       = errors.New("erro ao salvar no banco de dados")
 	ErrConnectionInDatabase = errors.New("erro de conexão com o banco de dados")
 	ErrInternal             = errors.New("erro interno no servidor")

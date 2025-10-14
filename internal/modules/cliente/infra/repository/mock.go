@@ -2,10 +2,12 @@ package repository
 
 import (
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/domain/domainerr"
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/domain/entities"
+	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/domain/vo"
 )
 
 // MockClienteRepository é um mock com a implementação da interface IClienteRepository
@@ -15,13 +17,13 @@ type MockClienteRepository struct {
 	//callCount int
 }
 
-// NewMockClienteRepository cria uma nova instancia de MockClienteRepository com 3 produtos padrão
+// NewMockClienteRepository cria uma nova instancia de MockClienteRepository com 3 clientes padrão
 func NewMockClienteRepository() *MockClienteRepository {
 	return &MockClienteRepository{
 		Clientes: []entities.Cliente{
-			{ID: uuid.New(), Nome: "Default Cliente1", Documento: "12345678901", Telefone: "11999999999", Bloqueado: false},
-			{ID: uuid.New(), Nome: "Default Cliente2", Documento: "10987654321", Telefone: "11888888888", Bloqueado: false},
-			{ID: uuid.New(), Nome: "Default Cliente3", Documento: "11122233344", Telefone: "11777777777", Bloqueado: true},
+			{ID: vo.FromUUID(uuid.New()), Nome: "Default Cliente1", Documento: "12345678901", Telefone: "11999999999", Bloqueado: false, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			{ID: vo.FromUUID(uuid.New()), Nome: "Default Cliente2", Documento: "10987654321", Telefone: "11888888888", Bloqueado: false, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			{ID: vo.FromUUID(uuid.New()), Nome: "Default Cliente3", Documento: "11122233344", Telefone: "11777777777", Bloqueado: true, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
 		},
 	}
 }
@@ -39,8 +41,8 @@ func (m *MockClienteRepository) AddCliente(p *entities.Cliente) error {
 		return domainerr.ErrClienteNotNil
 	}
 	// Cria um UUID
-	p.ID = uuid.New()
-	// Adiciona o produto ao slice
+	p.ID = vo.FromUUID(uuid.New())
+	// Adiciona o cliente ao slice
 	m.Clientes = append(m.Clientes, *p)
 	return nil
 }
@@ -56,14 +58,14 @@ func (m *MockClienteRepository) GetClienteByID(id string) (*entities.Cliente, er
 		return nil, domainerr.ErrClienteIDInvalid
 	}
 	for _, cliente := range m.Clientes {
-		if cliente.ID == idUUID {
+		if cliente.ID == vo.FromUUID(idUUID) {
 			return &cliente, nil
 		}
 	}
-	return nil, errors.New("produto não encontrado")
+	return nil, errors.New("cliente não encontrado")
 }
 
-// GetManyClienteByIDs - busca vários produtos por ID
+// GetManyClienteByIDs - busca vários clientes por ID
 func (m *MockClienteRepository) GetManyClienteByIDs(ids []string) ([]*entities.Cliente, error) {
 	if m.mockError != nil {
 		return nil, m.mockError
@@ -76,7 +78,7 @@ func (m *MockClienteRepository) GetManyClienteByIDs(ids []string) ([]*entities.C
 			return nil, domainerr.ErrClienteIDInvalid
 		}
 		for _, cliente := range m.Clientes {
-			if cliente.ID == idUUID {
+			if cliente.ID == vo.FromUUID(idUUID) {
 				clientes = append(clientes, &cliente)
 			}
 		}
@@ -102,7 +104,7 @@ func (m *MockClienteRepository) GetAllClientes(offset int64, limit int64) ([]*en
 		end = total
 	}
 
-	// Converte os produtos para um slice de ponteiros
+	// Converte os clientes para um slice de ponteiros
 	clientes := make([]*entities.Cliente, 0, end-offset)
 	for i := offset; i < end; i++ {
 		clientes = append(clientes, &m.Clientes[i])
@@ -122,9 +124,9 @@ func (m *MockClienteRepository) UpdateCliente(id string, p *entities.Cliente) er
 		return domainerr.ErrClienteIDInvalid
 	}
 	for i, cliente := range m.Clientes {
-		if cliente.ID == idUUID {
-			// Atualiza o produto existente com os novos valores
-			p.ID = idUUID // Garante que o ID não seja alterado
+		if cliente.ID == vo.FromUUID(idUUID) {
+			// Atualiza o cliente existente com os novos valores
+			p.ID = vo.FromUUID(idUUID) // Garante que o ID não seja alterado
 			m.Clientes[i] = *p
 			return nil
 		}
@@ -143,7 +145,7 @@ func (m *MockClienteRepository) DeleteCliente(id string) error {
 		return domainerr.ErrClienteIDInvalid
 	}
 	for i, p := range m.Clientes {
-		if p.ID == idUUID {
+		if p.ID == vo.FromUUID(idUUID) {
 			m.Clientes = append(m.Clientes[:i], m.Clientes[i+1:]...)
 			return nil
 		}

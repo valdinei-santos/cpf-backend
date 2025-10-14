@@ -39,6 +39,8 @@ func TestExecute(t *testing.T) {
 				Documento: mockRepoWithCliente.Clientes[0].Documento.String(),
 				Telefone:  mockRepoWithCliente.Clientes[0].Telefone.String(),
 				Bloqueado: mockRepoWithCliente.Clientes[0].Bloqueado.Bool(),
+				CreatedAt: mockRepoWithCliente.Clientes[0].CreatedAt.String(),
+				UpdatedAt: mockRepoWithCliente.Clientes[0].UpdatedAt.String(),
 			},
 			expectedErr: nil,
 			expectDebug: true,

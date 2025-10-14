@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
@@ -33,9 +34,6 @@ func NewRepoClienteMongoDB(client *mongo.Client, databaseName, collectionName st
 func (r *RepoClienteMongoDB) AddCliente(p *entities.Cliente) error {
 	ctx := context.Background()
 
-	// O MongoDB usa o campo _id como identificador único.
-	// Assumindo que seu struct entities.Cliente já está configurado
-	// para mapear o campo ID (uuid.UUID) para _id no BSON.
 	_, err := r.collection.InsertOne(ctx, p)
 	if err != nil {
 		return err
@@ -53,8 +51,14 @@ func (r *RepoClienteMongoDB) GetClienteByID(id string) (*entities.Cliente, error
 		return nil, domainerr.ErrClienteIDInvalid
 	}
 
+	// Converte o UUID do Go para o formato Binário do Mongo (UUID)
+	idBSON := primitive.Binary{
+		Subtype: 4,
+		Data:    idUUID[:],
+	}
+
 	// Consulta o MongoDB pelo campo _id (que deve ser o ID UUID)
-	filter := bson.M{"_id": idUUID}
+	filter := bson.M{"id": idBSON}
 	err = r.collection.FindOne(ctx, filter).Decode(&cliente)
 
 	if err != nil {
@@ -65,42 +69,6 @@ func (r *RepoClienteMongoDB) GetClienteByID(id string) (*entities.Cliente, error
 	}
 
 	return &cliente, nil
-}
-
-// GetManyClienteByIDs - busca vários clientes por ID
-func (r *RepoClienteMongoDB) GetManyClienteByIDs(ids []string) ([]*entities.Cliente, error) {
-	ctx := context.Background()
-
-	// Converte os IDs de string para uuid.UUID
-	var uuidList []uuid.UUID
-	for _, idStr := range ids {
-		idUUID, err := uuid.Parse(idStr)
-		if err != nil {
-			return nil, domainerr.ErrClienteIDInvalid
-		}
-		uuidList = append(uuidList, idUUID)
-	}
-
-	// Filtro usando $in para buscar múltiplos IDs
-	filter := bson.M{"_id": bson.M{"$in": uuidList}}
-
-	// Busca os documentos
-	cursor, err := r.collection.Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-	defer cursor.Close(ctx)
-
-	var clientes []*entities.Cliente
-	if err = cursor.All(ctx, &clientes); err != nil {
-		return nil, err
-	}
-
-	if len(clientes) == 0 {
-		return nil, domainerr.ErrClienteNotFoundMany
-	}
-
-	return clientes, nil
 }
 
 // GetAllClientes - retorna todos os clientes com paginação
@@ -147,15 +115,12 @@ func (r *RepoClienteMongoDB) UpdateCliente(id string, p *entities.Cliente) error
 		return domainerr.ErrClienteIDInvalid
 	}
 
-	// O filtro é o ID (que é o _id)
-	filter := bson.M{"_id": idUUID}
+	idBSON := primitive.Binary{
+		Subtype: 4,
+		Data:    idUUID[:],
+	}
 
-	// O update usa $set para atualizar apenas os campos fornecidos no objeto
-	// Assumindo que o struct 'p' contém os dados a serem atualizados,
-	// você pode querer criar um DTO (Data Transfer Object) para atualização
-	// ou usar o próprio 'p', mas garantir que os campos sejam marcados corretamente no struct
-	// para BSON, ou construir o documento de atualização manualmente.
-	// Neste exemplo, vou usar o documento completo, mas excluindo o _id da atualização.
+	filter := bson.M{"id": idBSON}
 	updateDoc := bson.M{"$set": p}
 
 	result, err := r.collection.UpdateOne(ctx, filter, updateDoc)
@@ -185,7 +150,12 @@ func (r *RepoClienteMongoDB) DeleteCliente(id string) error {
 		return domainerr.ErrClienteIDInvalid
 	}
 
-	filter := bson.M{"_id": idUUID}
+	idBSON := primitive.Binary{
+		Subtype: 4,
+		Data:    idUUID[:],
+	}
+
+	filter := bson.M{"id": idBSON}
 
 	result, err := r.collection.DeleteOne(ctx, filter)
 	if err != nil {

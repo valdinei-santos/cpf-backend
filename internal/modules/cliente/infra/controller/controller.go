@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/valdinei-santos/cpf-backend/internal/domain/globalerr"
@@ -18,13 +17,13 @@ import (
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/usecases/update"
 )
 
-// Create - Controlador para criar um produto
+// Create - Controlador para criar um cliente
 func Create(log logger.ILogger, ctx *gin.Context, useCase create.IUsecase) {
-	log.Debug("Entrou controller.Get")
+	log.Debug("Entrou controller.Create")
 	var input *dto.Request
 	err := json.NewDecoder(ctx.Request.Body).Decode(&input)
 	if err != nil {
-		outputError(log, ctx, globalerr.ErrBadRequest, "Create/usecase.Execute")
+		outputError(log, ctx, globalerr.ErrBadRequest, "Create/json.Decode")
 		return
 	}
 	resp, err := useCase.Execute(input)
@@ -37,7 +36,7 @@ func Create(log logger.ILogger, ctx *gin.Context, useCase create.IUsecase) {
 	log.Info("### Finished OK", "status_code", http.StatusCreated)
 }
 
-// Delete - Controlador para deletar um produto
+// Delete - Controlador para deletar um cliente
 func Delete(log logger.ILogger, ctx *gin.Context, useCase delete.IUsecase) {
 	log.Debug("Entrou controller.Delete")
 	id, err := getIdParam(log, ctx)
@@ -58,7 +57,7 @@ func Delete(log logger.ILogger, ctx *gin.Context, useCase delete.IUsecase) {
 	log.Info("### Finished OK", "status_code", http.StatusNoContent)
 }
 
-// Get - Controlador para obter um produto por ID
+// Get - Controlador para obter um cliente por ID
 func Get(log logger.ILogger, ctx *gin.Context, useCase get.IUsecase) {
 	log.Debug("Entrou controller.Get")
 	id, err := getIdParam(log, ctx)
@@ -76,7 +75,7 @@ func Get(log logger.ILogger, ctx *gin.Context, useCase get.IUsecase) {
 	log.Info("### Finished OK", "status_code", http.StatusOK)
 }
 
-// GetAll - Controlador para obter todos os produtos
+// GetAll - Controlador para obter todos os clientes
 func GetAll(log logger.ILogger, ctx *gin.Context, useCase getall.IUsecase) {
 	log.Debug("Entrou controller.GetAll")
 
@@ -103,7 +102,7 @@ func GetAll(log logger.ILogger, ctx *gin.Context, useCase getall.IUsecase) {
 	log.Info("### Finished OK", "status_code", http.StatusOK)
 }
 
-// Update - Controlador para alterar um produto pelo ID
+// Update - Controlador para alterar um cliente pelo ID
 func Update(log logger.ILogger, ctx *gin.Context, useCase update.IUsecase) {
 	log.Debug("Entrou controller.Update")
 	id, err := getIdParam(log, ctx)
@@ -135,19 +134,6 @@ func getIdParam(log logger.ILogger, ctx *gin.Context) (string, error) {
 	}
 	return idParam, nil
 }
-
-func getIdsQueryParams(ctx *gin.Context) ([]string, error) {
-	// Pega lista de IDs da query string: /api/products/compare?ids=1,2,3
-	idsQueryParam := ctx.Query("ids")
-	if idsQueryParam == "" {
-		return nil, domainerr.ErrClienteIDInvalid
-	}
-	idStrs := strings.Split(idsQueryParam, ",")
-	var ids []string
-	ids = append(ids, idStrs...)
-	return ids, nil
-}
-
 func outputError(log logger.ILogger, ctx *gin.Context, err error, method string) {
 	log.Error(err.Error(), "mtd", method)
 	dataJErro := dto.OutputDefault{}

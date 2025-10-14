@@ -27,7 +27,7 @@ func TestExecute(t *testing.T) {
 		expectError  bool
 	}{
 		{
-			name:         "Deve retornar sucesso ao excluir um produto",
+			name:         "Deve retornar sucesso ao excluir um cliente",
 			repo:         mockRepoWithCliente,
 			logger:       logger.NewMockILogger(),
 			inputID:      validID,

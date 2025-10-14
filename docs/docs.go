@@ -17,23 +17,25 @@ const docTemplate = `{
     "paths": {
         "/": {
             "get": {
-                "description": "Retorna uma lista de produtos, paginada",
+                "description": "Retorna uma lista de clientes, paginada",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "produtos"
+                    "clientes"
                 ],
-                "summary": "Lista todos os produtos",
+                "summary": "Lista todos os clientes",
                 "parameters": [
                     {
                         "type": "integer",
+                        "format": "int64",
                         "description": "Numero da página a ser retornada",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "format": "int64",
                         "description": "Quantidade de itens na página a ser retornada",
                         "name": "size",
                         "in": "query"
@@ -58,7 +60,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Cria um novo produto com os dados fornecidos",
+                "description": "Cria um novo cliente com os dados fornecidos",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,13 +68,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "produtos"
+                    "clientes"
                 ],
-                "summary": "Cria um novo produto",
+                "summary": "Cria um novo cliente",
                 "parameters": [
                     {
-                        "description": "Dados do produto a ser criado",
-                        "name": "product",
+                        "description": "Dados do cliente a ser criado",
+                        "name": "cliente",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -96,47 +98,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/compare": {
-            "get": {
-                "description": "Retorna uma lista de produtos com base nos IDs fornecidos em um formato de lista separada por vírgulas",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "produtos"
-                ],
-                "summary": "Compara múltiplos produtos por uma lista de IDs",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "IDs dos produtos a serem comparados (ex: 0d605862-91e8-11f0-9140-00155d6d572f,034aeff8-90ea-11f0-95f2-00155d6d5ec0,034afa35-90ea-11f0-95f2-00155d6d5ec0,034b11f9-90ea-11f0-95f2-00155d6d5ec0)",
-                        "name": "ids",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.ResponseManyPaginated"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Requisição inválida",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/{id}": {
             "get": {
-                "description": "Retorna um produto específico com base no ID fornecido",
+                "description": "Retorna um cliente específico com base no ID fornecido",
                 "consumes": [
                     "application/json"
                 ],
@@ -144,13 +108,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "produtos"
+                    "clientes"
                 ],
-                "summary": "Retorna um produto pelo ID",
+                "summary": "Retorna um cliente pelo ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Product ID",
+                        "description": "Cliente ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -172,7 +136,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Atualiza um produto existente com base no ID",
+                "description": "Atualiza um cliente existente com base no ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -180,20 +144,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "produtos"
+                    "clientes"
                 ],
-                "summary": "Atualiza um produto pelo ID",
+                "summary": "Atualiza um cliente pelo ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Product ID",
+                        "description": "Cliente ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Dados do produto para atualização",
-                        "name": "produto",
+                        "description": "Dados do cliente para atualização",
+                        "name": "cliente",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -217,18 +181,18 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Deleta um produto específico com base no ID fornecido",
+                "description": "Deleta um cliente específico com base no ID fornecido",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "produtos"
+                    "clientes"
                 ],
-                "summary": "Deleta um produto pelo ID",
+                "summary": "Deleta um cliente pelo ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "ID do produto a ser deletado",
+                        "description": "ID do cliente a ser deletado",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -236,13 +200,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Produto deletado com sucesso\"}",
+                        "description": "Cliente deletado com sucesso\"}",
                         "schema": {
                             "$ref": "#/definitions/dto.OutputDefault"
                         }
                     },
                     "404": {
-                        "description": "produto não encontrado",
+                        "description": "cliente não encontrado",
                         "schema": {
                             "type": "string"
                         }
@@ -255,24 +219,24 @@ const docTemplate = `{
         "dto.OutputDefault": {
             "type": "object",
             "properties": {
-                "message": {
+                "detail": {
                     "type": "string"
                 },
-                "status_code": {
-                    "type": "integer"
+                "instance": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
         "dto.Request": {
             "type": "object",
             "properties": {
-                "classificacao": {
-                    "type": "string"
+                "bloqueado": {
+                    "type": "boolean"
                 },
-                "descricao": {
-                    "type": "string"
-                },
-                "especificacao": {
+                "documento": {
                     "type": "string"
                 },
                 "id": {
@@ -281,10 +245,7 @@ const docTemplate = `{
                 "nome": {
                     "type": "string"
                 },
-                "preco": {
-                    "type": "number"
-                },
-                "url_imagem": {
+                "telefone": {
                     "type": "string"
                 }
             }
@@ -292,16 +253,13 @@ const docTemplate = `{
         "dto.Response": {
             "type": "object",
             "properties": {
-                "classificacao": {
-                    "type": "string"
+                "bloqueado": {
+                    "type": "boolean"
                 },
                 "created_at": {
                     "type": "string"
                 },
-                "descricao": {
-                    "type": "string"
-                },
-                "especificacao": {
+                "documento": {
                     "type": "string"
                 },
                 "id": {
@@ -310,13 +268,10 @@ const docTemplate = `{
                 "nome": {
                     "type": "string"
                 },
-                "preco": {
-                    "type": "number"
-                },
-                "updated_at": {
+                "telefone": {
                     "type": "string"
                 },
-                "url_imagem": {
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -324,17 +279,17 @@ const docTemplate = `{
         "dto.ResponseManyPaginated": {
             "type": "object",
             "properties": {
+                "clientes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Response"
+                    }
+                },
                 "currentPage": {
                     "type": "integer"
                 },
                 "itemsPerPage": {
                     "type": "integer"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.Response"
-                    }
                 },
                 "totalItems": {
                     "type": "integer"
@@ -350,11 +305,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "192.168.37.143:8888",
-	BasePath:         "/api/v1/products",
+	Host:             "localhost:8888",
+	BasePath:         "/api/v1/cpfs",
 	Schemes:          []string{},
-	Title:            "Product Details API",
-	Description:      "Está API gerencia detalhes de produtos.",
+	Title:            "CPF Management API",
+	Description:      "Está API gerencia CPFs.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

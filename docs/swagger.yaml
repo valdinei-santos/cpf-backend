@@ -1,81 +1,77 @@
-basePath: /api/v1/products
+basePath: /api/v1/cpfs
 definitions:
   dto.OutputDefault:
     properties:
-      message:
+      detail:
         type: string
-      status_code:
-        type: integer
+      instance:
+        type: string
+      title:
+        type: string
     type: object
   dto.Request:
     properties:
-      classificacao:
-        type: string
-      descricao:
-        type: string
-      especificacao:
+      bloqueado:
+        type: boolean
+      documento:
         type: string
       id:
         type: string
       nome:
         type: string
-      preco:
-        type: number
-      url_imagem:
+      telefone:
         type: string
     type: object
   dto.Response:
     properties:
-      classificacao:
-        type: string
+      bloqueado:
+        type: boolean
       created_at:
         type: string
-      descricao:
-        type: string
-      especificacao:
+      documento:
         type: string
       id:
         type: string
       nome:
         type: string
-      preco:
-        type: number
-      updated_at:
+      telefone:
         type: string
-      url_imagem:
+      updated_at:
         type: string
     type: object
   dto.ResponseManyPaginated:
     properties:
+      clientes:
+        items:
+          $ref: '#/definitions/dto.Response'
+        type: array
       currentPage:
         type: integer
       itemsPerPage:
         type: integer
-      products:
-        items:
-          $ref: '#/definitions/dto.Response'
-        type: array
       totalItems:
         type: integer
       totalPages:
         type: integer
     type: object
-host: 192.168.37.143:8888
+host: localhost:8888
 info:
   contact: {}
-  description: Está API gerencia detalhes de produtos.
-  title: Product Details API
+  description: Está API gerencia CPFs.
+  title: CPF Management API
   version: "1.0"
 paths:
   /:
     get:
-      description: Retorna uma lista de produtos, paginada
+      description: Retorna uma lista de clientes, paginada
       parameters:
       - description: Numero da página a ser retornada
+        format: int64
         in: query
         name: page
         type: integer
       - description: Quantidade de itens na página a ser retornada
+        format: int64
         in: query
         name: size
         type: integer
@@ -92,17 +88,17 @@ paths:
           description: Erro interno do servidor
           schema:
             type: string
-      summary: Lista todos os produtos
+      summary: Lista todos os clientes
       tags:
-      - produtos
+      - clientes
     post:
       consumes:
       - application/json
-      description: Cria um novo produto com os dados fornecidos
+      description: Cria um novo cliente com os dados fornecidos
       parameters:
-      - description: Dados do produto a ser criado
+      - description: Dados do cliente a ser criado
         in: body
-        name: product
+        name: cliente
         required: true
         schema:
           $ref: '#/definitions/dto.Request'
@@ -117,14 +113,14 @@ paths:
           description: Erro na requisição
           schema:
             type: string
-      summary: Cria um novo produto
+      summary: Cria um novo cliente
       tags:
-      - produtos
+      - clientes
   /{id}:
     delete:
-      description: Deleta um produto específico com base no ID fornecido
+      description: Deleta um cliente específico com base no ID fornecido
       parameters:
-      - description: ID do produto a ser deletado
+      - description: ID do cliente a ser deletado
         in: path
         name: id
         required: true
@@ -133,22 +129,22 @@ paths:
       - application/json
       responses:
         "200":
-          description: Produto deletado com sucesso"}
+          description: Cliente deletado com sucesso"}
           schema:
             $ref: '#/definitions/dto.OutputDefault'
         "404":
-          description: produto não encontrado
+          description: cliente não encontrado
           schema:
             type: string
-      summary: Deleta um produto pelo ID
+      summary: Deleta um cliente pelo ID
       tags:
-      - produtos
+      - clientes
     get:
       consumes:
       - application/json
-      description: Retorna um produto específico com base no ID fornecido
+      description: Retorna um cliente específico com base no ID fornecido
       parameters:
-      - description: Product ID
+      - description: Cliente ID
         in: path
         name: id
         required: true
@@ -164,22 +160,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/dto.OutputDefault'
-      summary: Retorna um produto pelo ID
+      summary: Retorna um cliente pelo ID
       tags:
-      - produtos
+      - clientes
     put:
       consumes:
       - application/json
-      description: Atualiza um produto existente com base no ID
+      description: Atualiza um cliente existente com base no ID
       parameters:
-      - description: Product ID
+      - description: Cliente ID
         in: path
         name: id
         required: true
         type: string
-      - description: Dados do produto para atualização
+      - description: Dados do cliente para atualização
         in: body
-        name: produto
+        name: cliente
         required: true
         schema:
           $ref: '#/definitions/dto.Request'
@@ -194,33 +190,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/dto.OutputDefault'
-      summary: Atualiza um produto pelo ID
+      summary: Atualiza um cliente pelo ID
       tags:
-      - produtos
-  /compare:
-    get:
-      description: Retorna uma lista de produtos com base nos IDs fornecidos em um
-        formato de lista separada por vírgulas
-      parameters:
-      - description: 'IDs dos produtos a serem comparados (ex: 0d605862-91e8-11f0-9140-00155d6d572f,034aeff8-90ea-11f0-95f2-00155d6d5ec0,034afa35-90ea-11f0-95f2-00155d6d5ec0,034b11f9-90ea-11f0-95f2-00155d6d5ec0)'
-        in: query
-        name: ids
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/dto.ResponseManyPaginated'
-            type: array
-        "400":
-          description: Requisição inválida
-          schema:
-            type: string
-      summary: Compara múltiplos produtos por uma lista de IDs
-      tags:
-      - produtos
+      - clientes
 swagger: "2.0"

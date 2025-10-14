@@ -15,7 +15,7 @@ import (
 
 // StartCreate - Metodo onde instanciamentos as dependencias e chamamos o controller
 func StartCreate(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou product.StartCreate")
+	log.Debug("Entrou cliente.StartCreate")
 	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
 	u := create.NewUseCase(repo, log)
 	controller.Create(log, ctx, u)
@@ -23,7 +23,7 @@ func StartCreate(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
 
 // StartDelete - Metodo onde instanciamentos as dependencias e chamamos o controller
 func StartDelete(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou product.StartDelete")
+	log.Debug("Entrou cliente.StartDelete")
 	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
 	u := delete.NewUseCase(repo, log)
 	controller.Delete(log, ctx, u)
@@ -31,7 +31,7 @@ func StartDelete(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
 
 // StartGet - Metodo onde instanciamentos as dependencias e chamamos o controller
 func StartGet(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou product.StartGet")
+	log.Debug("Entrou cliente.StartGet")
 	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
 	u := get.NewUseCase(repo, log)
 	controller.Get(log, ctx, u)
@@ -39,7 +39,7 @@ func StartGet(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
 
 // StartGetAll - Metodo onde instanciamentos as dependencias e chamamos o controller
 func StartGetAll(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou usecases.StartGetAll")
+	log.Debug("Entrou cliente.StartGetAll")
 	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
 	u := getall.NewUseCase(repo, log)
 	controller.GetAll(log, ctx, u)
@@ -47,7 +47,7 @@ func StartGetAll(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
 
 // StartUpdate - Metodo onde instanciamentos as dependencias e chamamos o controller
 func StartUpdate(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou product.StartUpdate")
+	log.Debug("Entrou cliente.StartUpdate")
 	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
 	u := update.NewUseCase(repo, log)
 	controller.Update(log, ctx, u)

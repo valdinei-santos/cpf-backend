@@ -2,6 +2,7 @@ package dto
 
 // Request -
 type Request struct {
+	ID        string `json:"id,omitempty"`
 	Nome      string `json:"nome"`
 	Documento string `json:"documento"`
 	Telefone  string `json:"telefone"`
@@ -29,7 +30,7 @@ type ResponseManyPaginated struct {
 
 // ResponseMany -
 type ResponseMany struct {
-	Products []Response `json:"clientes"`
+	Clientes []Response `json:"clientes"`
 }
 
 // OutputDefault - Struct com a resposta da API

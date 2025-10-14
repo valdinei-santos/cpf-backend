@@ -34,7 +34,7 @@ func NewUseCase(r repository.IClienteRepository, l logger.ILogger) *UseCase {
 // @Router       /{id} [put]
 // Execute - Executa a lógica de criação de um cliente
 func (u *UseCase) Execute(id string, in *dto.Request) (*dto.Response, error) {
-	u.log.Debug("Entrou create.Execute")
+	u.log.Debug("Entrou update.Execute")
 
 	// Pega o cliente no repositório pelo ID
 	c, err := u.repo.GetClienteByID(id)

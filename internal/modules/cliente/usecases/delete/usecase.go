@@ -24,7 +24,7 @@ func NewUseCase(r repository.IClienteRepository, l logger.ILogger) *UseCase {
 // @Tags         clientes
 // @Produce      json
 // @Param        id path string true "ID do cliente a ser deletado"
-// @Success      200 {object} dto.OutputDefault "Produto deletado com sucesso"}
+// @Success      200 {object} dto.OutputDefault "Cliente deletado com sucesso"}
 // @Failure      404 {string} string "cliente não encontrado"
 // @Router       /{id} [delete]
 // Execute - Executa a lógica para deletar um cliente

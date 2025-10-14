@@ -8,8 +8,8 @@ import (
 
 // UseCase - Struct do  caso de uso
 type UseCase struct {
-	repo repository.IClienteRepository // Interface do repositório para Produto
-	log  logger.ILogger                // Interface do log
+	repo repository.IClienteRepository
+	log  logger.ILogger
 }
 
 // NewUseCase - Construtor do caso de uso
