@@ -31,7 +31,6 @@ func NewRepoClienteMongoDB(client *mongo.Client, databaseName, collectionName st
 
 // AddCliente - adiciona um novo cliente ao repositório
 func (r *RepoClienteMongoDB) AddCliente(p *entities.Cliente) error {
-	// Cria um contexto para a operação, geralmente com timeout
 	ctx := context.Background()
 
 	// O MongoDB usa o campo _id como identificador único.
@@ -39,7 +38,6 @@ func (r *RepoClienteMongoDB) AddCliente(p *entities.Cliente) error {
 	// para mapear o campo ID (uuid.UUID) para _id no BSON.
 	_, err := r.collection.InsertOne(ctx, p)
 	if err != nil {
-		// Você pode adicionar tratamento de erro para duplicidade de chave aqui
 		return err
 	}
 	return nil

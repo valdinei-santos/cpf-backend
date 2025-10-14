@@ -5,6 +5,9 @@
 ### ping da API
 GET {{URL}}/ping
 
+### ping da API
+GET {{URL}}/stats
+
 ### Get cliente por ID não encontrado
 GET {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
 Accept: application/json
@@ -26,9 +29,9 @@ POST {{APIURL}}/
 Content-Type: application/json
 
 {
-    "nome": "cliente 1",
-    "documento": "71248609972",
-    "telefone": "48999448383",
+    "nome": "cliente 2",
+    "documento": "71248609973",
+    "telefone": "48999448384",
     "bloqueado": false
 }
 

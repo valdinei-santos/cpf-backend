@@ -9,7 +9,7 @@ func NewBloqueadoCliente(bloq bool) (BloqueadoCliente, error) {
 }
 
 func (b BloqueadoCliente) Bool() bool {
-	return b.Bool()
+	return bool(b)
 }
 
 func (b BloqueadoCliente) String() string {

@@ -46,43 +46,16 @@ clean: ## Remove o binário e arquivos de cache Go
 # ==========
 # DOCKER
 # ==========
+CONTAINER_NAME=cpf-backend
 
-# Variaveis Docker
-CONTAINER_NAME=cont-${APP_NAME}
-HOST_PORT=8888
-NETWORK_NAME=net_backend
-ENV_FILE=.env
-REGISTRY_DNS=localhost
-REGISTRY_PORT=5000
-REGISTRY_USER=
-
-get_version_command := read -p "Digite a versão da imagem (ex: 1.0.0): " VERSION; echo "$$VERSION"
-
-docker-build: ## Cria a imagem docker com o executável da api. Solicita a TAG da imagem a ser gerada
-	@VERSION=$$( $(get_version_command) ); \
-	echo "Criando a imagem ${APP_NAME}:$$VERSION" ; \
-	docker build -t ${APP_NAME}:$$VERSION .
-docker-start: ## Inicia o container da aplicação com a imagem da TAG informada
-	@VERSION=$$( $(get_version_command) ); \
-	@echo "Subindo o container ${CONTAINER_NAME}..."; \
-	echo "Iniciando o container ${CONTAINER_NAME} com imagem ${APP_NAME}:$$VERSION" ; \
-	echo "docker run --rm --name ${CONTAINER_NAME} --network ${NETWORK_NAME} -p 0.0.0.0:${HOST_PORT}:8800 --env-file ${ENV_FILE} -d ${APP_NAME}:$$VERSION" ; \
-	docker run --rm --name ${CONTAINER_NAME} --network ${NETWORK_NAME} -p 0.0.0.0:${HOST_PORT}:8800 --env-file ${ENV_FILE} -d ${APP_NAME}:$$VERSION
+docker-build: ## Cria a imagem docker com o executável da api, usando o docker-compose.yaml
+	docker-compose build
+docker-rebuild: ## Recria a imagem docker com o executável da api, usando o docker-compose.yaml
+	docker-compose build --no-cache
+docker-start: ## Inicia o container da aplicação
+	docker-compose up -d
 docker-stop: ## Para o container da aplicação
-	@echo "Parando o container ${CONTAINER_NAME}..."
-	docker stop ${CONTAINER_NAME}
-docker-restart: docker-stop docker-start ## Executa o docker-stop e docker-start na sequencia
-	@echo "Reiniciando container ${CONTAINER_NAME}..."
-docker-rebuild: ## Cria a imagem docker, para o container atual e sobe com a nova imagem. Solicita a TAG da imagem
-	@VERSION=$$( $(get_version_command) ); \
-	echo "Criando a imagem ${APP_NAME}:$$VERSION" ; \
-	docker build -t ${APP_NAME}:$$VERSION . ; \
-	echo "Parando o container ${CONTAINER_NAME}..." ; \
-	docker stop ${CONTAINER_NAME} ; \
-	echo "Subindo o container ${CONTAINER_NAME}..."; \
-	echo "Iniciando o container ${CONTAINER_NAME} com imagem ${APP_NAME}:$$VERSION" ; \
-	echo "docker run --rm --name ${CONTAINER_NAME} --network ${NETWORK_NAME} -p 0.0.0.0:${HOST_PORT}:8800 --env-file ${ENV_FILE} -d ${APP_NAME}:$$VERSION" ; \
-	docker run --rm --name ${CONTAINER_NAME} --network ${NETWORK_NAME} -p 0.0.0.0:${HOST_PORT}:8800 --env-file ${ENV_FILE} -d ${APP_NAME}:$$VERSION
+	docker-compose down
 docker-ps: ## Listar o container rodando
 	-docker ps | grep ${CONTAINER_NAME}
 docker-image: ## Para ver as imagens existentes
@@ -93,14 +66,3 @@ docker-logs-f: ## Mostra o log do container com opção -f
 	docker logs -f ${CONTAINER_NAME}
 docker-exec: ## Entra dentro do container com ash
 	docker exec -it ${CONTAINER_NAME} ash
-#docker-exec-bash: ## Entra dentro do container com bash
-#       docker exec -it ${CONTAINER_NAME} bash
-#docker-push: ## Envia a imagem para o registry local
-#        @echo "Não esqueça de fazer o \"make test\" antes de enviar a imagem para o Repository."
-#        @VERSION=$$( $(get_version_command) ); \
-#        echo "Forneça a senha do usuário do Registry (${REGISTRY_USER})" ; \
-#        docker login ${REGISTRY_DNS}:${REGISTRY_PORT} -u ${REGISTRY_USER} ; \
-#        docker tag ${APP_NAME}:$$VERSION ${REGISTRY_DNS}:${REGISTRY_PORT}/${APP_NAME}:$$VERSION ; \
-#        echo "tag $$VERSION gerada..." ; \
-#        docker push ${REGISTRY_DNS}:${REGISTRY_PORT}/${APP_NAME}:$$VERSION ; \
-#        echo "push concluído..."

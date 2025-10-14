@@ -14,20 +14,22 @@ services:
     networks:
       - mongo-network
   backend-go:
-    build: . # Assume que seu Dockerfile está na pasta atual
-    container_name: backend-go
+    build: 
+      context: . 
+      dockerfile: Dockerfile 
+    image: cpf-management/cpf-backend:1.0.0
+    container_name: cpf-backend
     restart: on-failure
     ports:
       - "0.0.0.0:8889:8800"
     environment:
-      # Variáveis de ambiente que o main.go irá ler
-      MONGO_HOST: mongodb # ESSENCIAL: Nome do serviço do MongoDB
+      MONGO_HOST: mongodb
       MONGO_PORT: 27017
       MONGO_USER: useradmin
       MONGO_PASS: useradmin
       PORT: 8800
     depends_on:
-      - mongodb # Garante que o MongoDB inicie antes da aplicação
+      - mongodb
     networks:
       - mongo-network
   

@@ -2,11 +2,10 @@ package dto
 
 // Request -
 type Request struct {
-	ID        string `json:"id"`
 	Nome      string `json:"nome"`
 	Documento string `json:"documento"`
 	Telefone  string `json:"telefone"`
-	Bloqueado bool   `json:"bloquaeado"`
+	Bloqueado bool   `json:"bloqueado"`
 }
 
 // Response -
@@ -15,7 +14,7 @@ type Response struct {
 	Nome      string `json:"nome"`
 	Documento string `json:"documento"`
 	Telefone  string `json:"telefone"`
-	Bloqueado bool   `json:"bloquaeado"`
+	Bloqueado bool   `json:"bloqueado"`
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }
