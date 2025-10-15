@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -64,7 +65,7 @@ func TestClientePost_Integration(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, client.Ping(ctx, nil))
 
-	db := client.Database("cpf_management_test")
+	db := client.Database("cpf_management")
 	log := &mockLogger{}
 
 	// ⚙️ Inicializa o router real
@@ -97,6 +98,7 @@ func TestClientePost_Integration(t *testing.T) {
 	// 🔍 Verifica se o cliente foi inserido no Mongo
 	col := db.Collection("cliente")
 	count, err := col.CountDocuments(ctx, map[string]any{"documento": "12345678900"})
+	fmt.Println("count:", count)
 	require.NoError(t, err)
 	require.Equal(t, int64(1), count)
 }

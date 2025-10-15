@@ -31,7 +31,7 @@ mock: ## Recria os mocks usados pelos tests da aplicação
 test: ## Executa os test automatizados da aplicação
 	@echo "Executando os testes automatizados..."
 	@go test ./...
-test-int: ## Executa os testes de integração da aplicação
+test-integ: ## Executa os testes de integração da aplicação
 	@echo "Executando os testes de integração..."
 	@go test -v -tags=integration ./cmd/api/routes
 cover: ## Mostra a cobertura de testes da aplicação
@@ -52,13 +52,13 @@ clean: ## Remove o binário e arquivos de cache Go
 CONTAINER_NAME=cpf-backend
 
 docker-build: ## Cria a imagem docker com o executável da api, usando o docker-compose.yaml
-	docker compose build
+	docker-compose build
 docker-rebuild: ## Recria a imagem docker com o executável da api, usando o docker-compose.yaml
-	docker compose up -d --build
+	docker-compose up -d --build
 docker-start: ## Inicia o container da aplicaçã 
-	docker compose up -d
+	docker-compose up -d
 docker-stop: ## Para o container da aplicaçã 
-	docker compose down
+	docker-compose down
 docker-ps: ## Listar o container rodand 
 	-docker ps | grep ${CONTAINER_NAME}
 docker-image: ## Para ver as imagens existentes

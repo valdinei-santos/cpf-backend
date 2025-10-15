@@ -41,7 +41,7 @@ As seguintes decisões foram tomadas para atingir esses objetivos:
 
 Esta API utiliza a especificação OpenAPI (anteriormente conhecida como Swagger) para sua documentação interativa. Para acessá-la, basta iniciar a API e navegar até o seguinte endpoint no seu navegador:
 
-http://localhost:8888/swagger/index.html
+http://localhost:8889/swagger/index.html
 
 
 ## Detalhes de Implementação

@@ -21,8 +21,8 @@ import (
 // @title CPF Management API
 // @version 1.0
 // @description Está API gerencia CPFs.
-// @host localhost:8888
-// @BasePath /api/v1/cpfs
+// @host localhost:8889
+// @BasePath /api/v1/cliente
 func main() {
 	fmt.Println("Iniciando...")
 	config, err := config.LoadConfig()

@@ -2,7 +2,7 @@ package dto
 
 // Request -
 type Request struct {
-	ID        string `json:"id,omitempty"`
+	//ID        string `json:"id,omitempty"`
 	Nome      string `json:"nome"`
 	Documento string `json:"documento"`
 	Telefone  string `json:"telefone"`

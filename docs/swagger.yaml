@@ -1,4 +1,4 @@
-basePath: /api/v1/cpfs
+basePath: /api/v1/cliente
 definitions:
   dto.OutputDefault:
     properties:
@@ -15,9 +15,8 @@ definitions:
         type: boolean
       documento:
         type: string
-      id:
-        type: string
       nome:
+        description: ID        string `json:"id,omitempty"`
         type: string
       telefone:
         type: string
@@ -54,7 +53,7 @@ definitions:
       totalPages:
         type: integer
     type: object
-host: localhost:8888
+host: localhost:8889
 info:
   contact: {}
   description: Está API gerencia CPFs.

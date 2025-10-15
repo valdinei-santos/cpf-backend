@@ -6,8 +6,8 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8888",
-    "basePath": "/api/v1/cpfs",
+    "host": "localhost:8889",
+    "basePath": "/api/v1/cliente",
     "paths": {
         "/": {
             "get": {
@@ -233,10 +233,8 @@
                 "documento": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "nome": {
+                    "description": "ID        string `json:\"id,omitempty\"`",
                     "type": "string"
                 },
                 "telefone": {
