@@ -1,6 +1,6 @@
-# API REST cpf-backend
+# CPF-MANAGEMENT - API REST cpf-backend
 
-Esta é uma API REST feita em Golang para gerenciar clientes(CPF/CNPJ). Veja mais detalhes no [`README.md`](./README.md)
+API REST feita em Golang para gerenciar clientes(CPF/CNPJ). Veja mais detalhes no [`README.md`](./README.md)
 
 ## Pré-requisitos
 

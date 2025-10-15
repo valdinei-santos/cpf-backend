@@ -1,4 +1,6 @@
-# API REST cpf-backend
+# CPF-MANAGEMENT - API REST cpf-backend
+
+Este é o repositório do backend da aplicação **CPF-MANAGEMENT**, desenvolvido utilizando a linguagem GO. A aplicação é conteinerizada e gerenciada via docker-compose.yaml para facilitar o desenvolvimento e a implantação local.
 
 ## Descrição Técnica
 
