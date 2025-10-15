@@ -39,18 +39,30 @@ Para rodar a API, você executa o arquivo executável `cpf-backend` que foi gera
 ./cpf-backend
 ```
 
-## 4. Testes nos endpoints
+## 4. Execução com docker
+
+Para criar a imagem com o código fonto compilado - Usa o docker-compose.yaml do projeto.
+```bash
+make docker-build
+```
+
+Para subir o container com a imagem criada - Usa o docker-compose.yaml do projeto.
+```bash
+make docker-start
+```
+
+## 5. Testes nos endpoints
 Com a API em execução você pode fazer testes básicos usuando sua ferramenta preferida.
 Seguem alguns endpoints de exemplo.
-- GET http://localhost:8888/ping
-- POST http://localhost:8888/api/v1/cliente/ --> Body com JSON conforme documentação OpenAPI
-- DELETE http://localhost:8888/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
-- GET http://localhost:8888/api/v1/cliente?page=1&limit=2
-- GET http://localhost:8888/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
-- PUT http://localhost:8888/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
+- GET http://localhost:8889/ping
+- POST http://localhost:8889/api/v1/cliente/ --> Body com JSON conforme documentação OpenAPI
+- DELETE http://localhost:8889/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
+- GET http://localhost:8889/api/v1/cliente?page=1&limit=2
+- GET http://localhost:8889/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
+- PUT http://localhost:8889/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
 
 
-## 5. Testes automatizados
+## 6. Testes automatizados
 Para rodar os testes unitários e de integração do projeto, siga os passos abaixo:
 
 1. Navegue até o diretório do projeto. Caso a API esteja rodando você precisa parar ela com CTRL+C:
@@ -58,9 +70,9 @@ Para rodar os testes unitários e de integração do projeto, siga os passos aba
 cd cpf-backend
 ```
 
-2. Execute todos os testes:
+2. Execute todos os testes de unidade:
 ```bash
-make test
+make test-u
 ```
 
 3. Para rodar um arquivo de teste específico, use o comando **go test "nome-do-arquivo"**, conforme abaixo:
@@ -73,7 +85,12 @@ go test modules/cliente/usecases/delete/usecase_test.go
 go test -run "Deve retornar sucesso ao excluir um cliente" modules/cliente/usecases/delete/usecase_test.go
 ```
 
-5. Para ver a cobertura dos testes na aplicação:
+5. Para rodar o teste de integração de todos os endpoints:
+```bash
+go test -v -tags=integration ./cmd/api/routes
+```
+
+6. Para ver a cobertura dos testes na aplicação:
 ```bash
 make cover
 ``` 
@@ -89,7 +106,7 @@ O projeto inclui testes automatizados para os seguintes pacotes:
 - **modules/cliente/usecases/update**: Faz testes de unidade do usecase **update**
 
 
-## 6. Documentação da API
+## 7. Documentação da API
 O link para acessar a documentação está disponível no `README.md`, mas caso algum alteração seja feita no código da API e você precise recriar a documentação, o comando abaixo deverá ser executado:
 ```bash
 make docs

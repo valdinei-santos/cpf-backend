@@ -108,8 +108,8 @@ http://localhost:8889/swagger/index.html
 
 <h3>Fluxo de Execução do endpoint GET /api/v1/cliente/{id} <span style="font-size: 0.7em;">(Os demais endpoints seguem a mesma lógica de execução)</span></h3>
 
-Com a API em execução na porta **8888**  
-**(http://localhost:8888/api/v1/cliente/034ab7b3-90ea-11f0-95f2-00155d6d5ec0)**
+Com a API em execução na porta **8889**  
+**(http://localhost:8889/api/v1/cliente/034ab7b3-90ea-11f0-95f2-00155d6d5ec0)**
 1. A requisição **GET** chega ao endpoint **/api/v1/cliente/{id}**. A rota é processada pelo pacote **routes**.
 2. O pacote **routes** aciona a função **StartGet**, passando as dependências de **log**, **contexto do Gin** e **repository**.
 3. Dentro da função **StartGet** (no pacote **cliente**), uma instância do **UseCase** é criada com as dependências de **log** e **repository**. Em seguida, a função **Get** do **controller** é chamada, recebendo o **log**, o **contexto do Gin** e o **UseCase** como dependências.
