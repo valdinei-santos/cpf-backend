@@ -74,8 +74,8 @@ http://localhost:8889/swagger/index.html
 │       ├── docs      
 │       ├── main.go   # Inicia as estruturas básicas de config, log, database e framework GIN
 │       └── routes    # Onde os endpoint estão definidos
-|── docs         # Arquivos do Swagger gerados automaticamente pela ferramenta
-|── internal
+├── docs         # Arquivos do Swagger gerados automaticamente pela ferramenta
+├── internal
 │   ├── domain
 │   │   └── globalerr
 │   ├── infra
