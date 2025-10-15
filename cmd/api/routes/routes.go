@@ -29,7 +29,23 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 	// ---------------------------
 
 	router.Use(AccessCounterMiddleware) // Adicionar o Middleware de Contagem antes de todas as rotas
+	// @Summary      Retorna o status da API
+	// @Description  Retorna o status da API
+	// @Tags         util
+	// @Accept       json
+	// @Produce      json
+	// @Success      200 {object} map[string]interface{}
+	// @Failure      400 {object} dto.OutputDefault
+	// @Router       /status [get]
 	router.GET("/status", GetStatusHandler)
+	// @Summary      Retorna pong
+	// @Description  Retorna pong se estiver tudo ok com a API
+	// @Tags         util
+	// @Accept       json
+	// @Produce      json
+	// @Success      200 string "pong"
+	// @Failure      400 {}
+	// @Router       /ping [get]
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})

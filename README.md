@@ -16,11 +16,14 @@ Esta API é construída com uma arquitetura **RESTful**, usando URLs intuitivas 
 
 | Verbo   | Rota                                               | Descrição                             |
 | :------ | :------------------------------------------------- | :------------------------------------ |
+| `GET`   | `/ping`                                            | Retorna pong se estiver tudo ok.      |
+| `GET`   | `/status`                                          | Retorna o status da API.              |
 | `POST`  | `/api/v1/cliente`                                  | Cria um novo cliente.                 |
 | `DELETE`| `/api/v1/cliente/{id}`                             | Deleta um cliente por ID.             |
 | `GET`   | `/api/v1/cliente?page=1&limit=2`                   | Lista todos os clientes.              |
 | `GET`   | `/api/v1/cliente/{id}`                             | Retorna um cliente por ID.            |
 | `PUT`   | `/api/v1/cliente/{id}`                             | Atualiza um cliente por ID.           |
+
 
 
 ### Tratamento de Erros

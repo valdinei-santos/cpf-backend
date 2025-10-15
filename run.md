@@ -55,6 +55,7 @@ make docker-start
 Com a API em execução você pode fazer testes básicos usuando sua ferramenta preferida.
 Seguem alguns endpoints de exemplo.
 - GET http://localhost:8889/ping
+- GET http://localhost:8889/status
 - POST http://localhost:8889/api/v1/cliente/ --> Body com JSON conforme documentação OpenAPI
 - DELETE http://localhost:8889/api/v1/cliente/0d605862-91e8-11f0-9140-00155d6d572f
 - GET http://localhost:8889/api/v1/cliente?page=1&limit=2
