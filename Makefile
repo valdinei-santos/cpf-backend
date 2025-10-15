@@ -16,22 +16,22 @@ run: ## Roda o projeto
 build: ## Cria o executável da aplicação
 	@echo "Construindo o executável..."
 	@go build -o $(APP_NAME) cmd/api/main.go
-mock: ## Recria os mocks usados pelos tests da aplicação
-	@echo "Recriando os mocks..."
-	mockgen -source=internal/infra/logger/interfaces.go -destination=internal/infra/logger/mocks/mocks.go -package=mocks
+# mock: ## Recria os mocks usados pelos tests da aplicação
+# 	@echo "Recriando os mocks..."
+# 	mockgen -source=internal/infra/logger/interfaces.go -destination=internal/infra/logger/mocks/mocks.go -package=mocks
 
-	mockgen -source=internal/modules/cliente/infra/repository/interfaces.go -destination=internal/modules/cliente/infra/repository/mocks/mocks.go -package=mocks
-	mockgen -source=internal/modules/cliente/usecases/create/interfaces.go -destination=internal/modules/cliente/usecases/create/mocks/mocks.go -package=mocks
-	mockgen -source=internal/modules/cliente/usecases/delete/interfaces.go -destination=internal/modules/cliente/usecases/delete/mocks/mocks.go -package=mocks
-	mockgen -source=internal/modules/cliente/usecases/get/interfaces.go -destination=internal/modules/cliente/usecases/get/mocks/mocks.go -package=mocks
-	mockgen -source=internal/modules/cliente/usecases/getall/interfaces.go -destination=internal/modules/cliente/usecases/getall/mocks/mocks.go -package=mocks
-	mockgen -source=internal/modules/cliente/usecases/update/interfaces.go -destination=internal/modules/cliente/usecases/update/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/infra/repository/interfaces.go -destination=internal/modules/cliente/infra/repository/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/usecases/create/interfaces.go -destination=internal/modules/cliente/usecases/create/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/usecases/delete/interfaces.go -destination=internal/modules/cliente/usecases/delete/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/usecases/get/interfaces.go -destination=internal/modules/cliente/usecases/get/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/usecases/getall/interfaces.go -destination=internal/modules/cliente/usecases/getall/mocks/mocks.go -package=mocks
+# 	mockgen -source=internal/modules/cliente/usecases/update/interfaces.go -destination=internal/modules/cliente/usecases/update/mocks/mocks.go -package=mocks
 
-	go mod tidy
-test: ## Executa os test automatizados da aplicação
+# 	go mod tidy
+test-u: ## Executa os test automatizados da aplicação
 	@echo "Executando os testes automatizados..."
 	@go test ./...
-test-integ: ## Executa os testes de integração da aplicação
+test-i: ## Executa os testes de integração da aplicação
 	@echo "Executando os testes de integração..."
 	@go test -v -tags=integration ./cmd/api/routes
 cover: ## Mostra a cobertura de testes da aplicação
@@ -52,13 +52,13 @@ clean: ## Remove o binário e arquivos de cache Go
 CONTAINER_NAME=cpf-backend
 
 docker-build: ## Cria a imagem docker com o executável da api, usando o docker-compose.yaml
-	docker-compose build
+	docker compose build
 docker-rebuild: ## Recria a imagem docker com o executável da api, usando o docker-compose.yaml
-	docker-compose up -d --build
+	docker compose up -d --build
 docker-start: ## Inicia o container da aplicaçã 
-	docker-compose up -d
+	docker compose up -d
 docker-stop: ## Para o container da aplicaçã 
-	docker-compose down
+	docker compose down
 docker-ps: ## Listar o container rodand 
 	-docker ps | grep ${CONTAINER_NAME}
 docker-image: ## Para ver as imagens existentes

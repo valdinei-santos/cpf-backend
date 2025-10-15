@@ -53,7 +53,7 @@ definitions:
       totalPages:
         type: integer
     type: object
-host: localhost:8889
+host: previg-dev03.previg.org.br:8889
 info:
   contact: {}
   description: Está API gerencia CPFs.

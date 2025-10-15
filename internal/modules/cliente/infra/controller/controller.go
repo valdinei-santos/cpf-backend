@@ -143,7 +143,7 @@ func outputError(log logger.ILogger, ctx *gin.Context, err error, method string)
 		errHttp = http.StatusConflict
 		dataJErro.Title = globalerr.ErrHttp409.Error()
 		dataJErro.Detail = domainerr.ErrDuplicatekey.Error()
-	case globalerr.ErrNotFound:
+	case globalerr.ErrNotFound, domainerr.ErrClienteNotFound:
 		errHttp = http.StatusNotFound
 		dataJErro.Title = globalerr.ErrHttp404.Error()
 		dataJErro.Detail = domainerr.ErrClienteNotFound.Error()

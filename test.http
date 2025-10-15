@@ -13,7 +13,7 @@ GET {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
 Accept: application/json
 
 ### Get cliente por ID encontrado
-GET {{APIURL}}/0d605862-91e8-11f0-9140-00155d6d572f
+GET {{APIURL}}/43310521-a934-11f0-ae2b-fabc94dc9b50
 Accept: application/json
 
 ### Get todos os clientes
@@ -24,15 +24,25 @@ Accept: application/json
 GET {{APIURL}}?page=1&limit=2
 Accept: application/json
 
-### Adicionar um cliente
+### Adicionar um cliente 1
+POST {{APIURL}}/
+Content-Type: application/json
+
+{
+    "nome": "cliente 1",
+    "documento": "71248609973",
+    "telefone": "48999448384",
+    "bloqueado": false
+}
+
+### Adicionar um cliente 2
 POST {{APIURL}}/
 Content-Type: application/json
 
 {
     "nome": "cliente 2",
     "documento": "71248609973",
-    "telefone": "48999448384",
-    "bloqueado": false
+    "telefone": "48999448384"
 }
 
 ### Deleta um cliente
@@ -40,11 +50,10 @@ DELETE {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
 Content-Type: application/json
 
 ### Alterar um cliente
-PUT {{APIURL}}/0621c52e-91f4-11f0-abfa-00155d6d572f
+PUT {{APIURL}}/43310521-a934-11f0-ae2b-fabc94dc9b50
 Content-Type: application/json
 
 {
-    "id": "0621c52e-91f4-11f0-abfa-00155d6d572f",
     "nome": "cliente 333",
     "documento": "71248609972",
     "telefone": "48999448383",
