@@ -98,6 +98,68 @@ const docTemplate = `{
                 }
             }
         },
+        "/ping": {
+            "get": {
+                "description": "Retorna pong se estiver tudo ok com a API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "util"
+                ],
+                "summary": "Retorna pong",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OutputDefault"
+                        }
+                    }
+                }
+            }
+        },
+        "/status": {
+            "get": {
+                "description": "Retorna o status da API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "util"
+                ],
+                "summary": "Retorna o status da API",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OutputDefault"
+                        }
+                    }
+                }
+            }
+        },
         "/{id}": {
             "get": {
                 "description": "Retorna um cliente específico com base no ID fornecido",
@@ -303,7 +365,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "previg-dev03.previg.org.br:8889",
+	Host:             "localhost:8889",
 	BasePath:         "/api/v1/cliente",
 	Schemes:          []string{},
 	Title:            "CPF Management API",

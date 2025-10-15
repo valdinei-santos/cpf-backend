@@ -21,8 +21,8 @@ import (
 // @title CPF Management API
 // @version 1.0
 // @description Está API gerencia CPFs.
-// // @host localhost:8889
-// @host previg-dev03.previg.org.br:8889
+// @host localhost:8889
+// // @host previg-dev03.previg.org.br:8889
 // @BasePath /api/v1/cliente
 func main() {
 	fmt.Println("Iniciando...")

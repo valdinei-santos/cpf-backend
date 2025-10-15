@@ -29,33 +29,14 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 	// ---------------------------
 
 	router.Use(AccessCounterMiddleware) // Adicionar o Middleware de Contagem antes de todas as rotas
-	// @Summary      Retorna o status da API
-	// @Description  Retorna o status da API
-	// @Tags         util
-	// @Accept       json
-	// @Produce      json
-	// @Success      200 {object} map[string]interface{}
-	// @Failure      400 {object} dto.OutputDefault
-	// @Router       /status [get]
 	router.GET("/status", GetStatusHandler)
-	// @Summary      Retorna pong
-	// @Description  Retorna pong se estiver tudo ok com a API
-	// @Tags         util
-	// @Accept       json
-	// @Produce      json
-	// @Success      200 string "pong"
-	// @Failure      400 {}
-	// @Router       /ping [get]
-	router.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
+	router.GET("/ping", GetPingHandler)
 
 	v1 := router.Group("/api/v1")
 	prod := v1.Group("/cliente")
 
 	prod.OPTIONS("", func(c *gin.Context) {
 		c.Status(204)
-		// O middleware CORS (que já foi aplicado no router) DEVE injetar os headers
 	})
 
 	prod.POST("", func(c *gin.Context) {
@@ -107,7 +88,14 @@ func AccessCounterMiddleware(c *gin.Context) {
 	c.Next() // Processa o restante da requisição
 }
 
-// GetStatsHandler -- Função Handler para exibir as estatísticas
+// @Summary      Retorna o status da API
+// @Description  Retorna o status da API
+// @Tags         util
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} map[string]interface{}
+// @Failure      400 {object} dto.OutputDefault
+// @Router       /status [get]
 func GetStatusHandler(c *gin.Context) {
 	statsData := stats.GlobalStats.GetStats()
 	uptime := time.Since(stats.GlobalStats.StartTime).Round(time.Second).String()
@@ -116,5 +104,19 @@ func GetStatusHandler(c *gin.Context) {
 		"status":        "success",
 		"uptime":        uptime,
 		"access_counts": statsData,
+	})
+}
+
+// @Summary      Retorna pong
+// @Description  Retorna pong se estiver tudo ok com a API
+// @Tags         util
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} map[string]string
+// @Failure      400 {object} dto.OutputDefault
+// @Router       /ping [get]
+func GetPingHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "pong",
 	})
 }

@@ -53,7 +53,7 @@ definitions:
       totalPages:
         type: integer
     type: object
-host: previg-dev03.previg.org.br:8889
+host: localhost:8889
 info:
   contact: {}
   description: Está API gerencia CPFs.
@@ -192,4 +192,45 @@ paths:
       summary: Atualiza um cliente pelo ID
       tags:
       - clientes
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: Retorna pong se estiver tudo ok com a API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.OutputDefault'
+      summary: Retorna pong
+      tags:
+      - util
+  /status:
+    get:
+      consumes:
+      - application/json
+      description: Retorna o status da API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.OutputDefault'
+      summary: Retorna o status da API
+      tags:
+      - util
 swagger: "2.0"

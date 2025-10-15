@@ -6,7 +6,7 @@
 GET {{URL}}/ping
 
 ### ping da API
-GET {{URL}}/stats
+GET {{URL}}/status
 
 ### Get cliente por ID não encontrado
 GET {{APIURL}}/a1b2c3d4-e5f6-1234-5678-90abcdef1234
