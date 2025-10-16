@@ -1,4 +1,3 @@
-// Pacote routes configura as rotas da API.
 package routes
 
 import (
@@ -28,9 +27,11 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 	}))
 	// ---------------------------
 
+	clienteModule := cliente.NewModuleCliente(log, db)
 	router.Use(AccessCounterMiddleware) // Adicionar o Middleware de Contagem antes de todas as rotas
 	router.GET("/status", GetStatusHandler)
 	router.GET("/ping", GetPingHandler)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
 	v1 := router.Group("/api/v1")
 	prod := v1.Group("/cliente")
@@ -49,22 +50,22 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 		// fmt.Printf("CORS DEBUG: Request Host (Go): %s\n", realHost)
 
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
-		cliente.StartCreate(log, c, db)
+		clienteModule.Controller.Create(c)
 	})
 
 	prod.DELETE("/:id", func(c *gin.Context) {
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
-		cliente.StartDelete(log, c, db)
+		clienteModule.Controller.Delete(c)
 	})
 
 	prod.GET("/:id", func(c *gin.Context) {
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
-		cliente.StartGet(log, c, db)
+		clienteModule.Controller.Get(c)
 	})
 
 	prod.GET("", func(c *gin.Context) {
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
-		cliente.StartGetAll(log, c, db)
+		clienteModule.Controller.GetAll(c)
 	})
 
 	prod.OPTIONS("/:id", func(c *gin.Context) {
@@ -74,16 +75,14 @@ func InitRoutes(router *gin.RouterGroup, log logger.ILogger, db *mongo.Database)
 
 	prod.PUT("/:id", func(c *gin.Context) {
 		log.Info("### Start endpoint " + c.Request.Method + " " + c.Request.URL.Path)
-		cliente.StartUpdate(log, c, db)
+		clienteModule.Controller.Update(c)
 	})
-
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
 }
 
 // AccessCounterMiddleware -- Middleware para Contar Acessos
 func AccessCounterMiddleware(c *gin.Context) {
-	// Usa o path da rota para contagem. Ex: /api/v1/cpfs
+	// Usa o path da rota para contagem. Ex: /api/v1/cliente
 	stats.GlobalStats.Increment(c.Request.URL.Path)
 	c.Next() // Processa o restante da requisição
 }

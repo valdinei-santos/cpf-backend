@@ -17,36 +17,65 @@ import (
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/usecases/update"
 )
 
-// Create - Controlador para criar um cliente
-func Create(log logger.ILogger, ctx *gin.Context, useCase create.IUsecase) {
-	log.Debug("Entrou controller.Create")
+// ClienteController orquestra todas as ações da entidade Cliente.
+type ClienteController struct {
+	log      logger.ILogger
+	createUC create.IUsecase
+	deleteUC delete.IUsecase
+	getUC    get.IUsecase
+	getAllUC getall.IUsecase
+	updateUC update.IUsecase
+}
+
+// NewClienteController é o construtor que injeta todas as dependências.
+func NewClienteController(
+	log logger.ILogger,
+	c create.IUsecase,
+	d delete.IUsecase,
+	g get.IUsecase,
+	ga getall.IUsecase,
+	u update.IUsecase,
+) *ClienteController {
+	return &ClienteController{
+		log:      log,
+		createUC: c,
+		deleteUC: d,
+		getUC:    g,
+		getAllUC: ga,
+		updateUC: u,
+	}
+}
+
+// Handler específico de Criação
+func (c *ClienteController) Create(ctx *gin.Context) {
+	c.log.Debug("Entrou controller.Create")
 	var input *dto.Request
 	err := json.NewDecoder(ctx.Request.Body).Decode(&input)
 	if err != nil {
-		outputError(log, ctx, globalerr.ErrBadRequest, "Create/json.Decode")
+		outputError(c.log, ctx, globalerr.ErrBadRequest, "Create/json.Decode")
 		return
 	}
-	resp, err := useCase.Execute(input)
+	resp, err := c.createUC.Execute(input)
 	if err != nil {
-		outputError(log, ctx, err, "Create/usecase.Execute")
+		outputError(c.log, ctx, err, "Create/usecase.Execute")
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, resp)
-	log.Info("### Finished OK", "status_code", http.StatusCreated)
+	c.log.Info("### Finished OK", "status_code", http.StatusCreated)
 }
 
-// Delete - Controlador para deletar um cliente
-func Delete(log logger.ILogger, ctx *gin.Context, useCase delete.IUsecase) {
-	log.Debug("Entrou controller.Delete")
-	id, err := getIdParam(log, ctx)
+// Handler específico de Deleção
+func (c *ClienteController) Delete(ctx *gin.Context) {
+	c.log.Debug("Entrou controller.Delete")
+	id, err := getIdParam(c.log, ctx)
 	if err != nil {
 		return
 	}
-	log.Debug("ID: " + id)
-	err = useCase.Execute(id)
+	c.log.Debug("ID: " + id)
+	err = c.deleteUC.Execute(id)
 	if err != nil {
-		outputError(log, ctx, err, "Delete/usecase.Execute")
+		outputError(c.log, ctx, err, "Delete/usecase.Execute")
 		return
 	}
 
@@ -54,76 +83,76 @@ func Delete(log logger.ILogger, ctx *gin.Context, useCase delete.IUsecase) {
 	result := &dto.OutputDefault{}
 
 	ctx.JSON(http.StatusNoContent, result)
-	log.Info("### Finished OK", "status_code", http.StatusNoContent)
+	c.log.Info("### Finished OK", "status_code", http.StatusNoContent)
 }
 
-// Get - Controlador para obter um cliente por ID
-func Get(log logger.ILogger, ctx *gin.Context, useCase get.IUsecase) {
-	log.Debug("Entrou controller.Get")
-	id, err := getIdParam(log, ctx)
+// Handler específico de Obtenção por ID
+func (c *ClienteController) Get(ctx *gin.Context) {
+	c.log.Debug("Entrou controller.Get")
+	id, err := getIdParam(c.log, ctx)
 	if err != nil {
-		outputError(log, ctx, globalerr.ErrBadRequest, "Get/getIdParam")
+		outputError(c.log, ctx, globalerr.ErrBadRequest, "Get/getIdParam")
 		return
 	}
-	log.Debug("ID: " + id)
-	resp, err := useCase.Execute(id)
+	c.log.Debug("ID: " + id)
+	resp, err := c.getUC.Execute(id)
 	if err != nil {
-		outputError(log, ctx, err, "Get/usecase.Execute")
+		outputError(c.log, ctx, err, "Get/usecase.Execute")
 		return
 	}
 	ctx.JSON(http.StatusOK, resp)
-	log.Info("### Finished OK", "status_code", http.StatusOK)
+	c.log.Info("### Finished OK", "status_code", http.StatusOK)
 }
 
-// GetAll - Controlador para obter todos os clientes
-func GetAll(log logger.ILogger, ctx *gin.Context, useCase getall.IUsecase) {
-	log.Debug("Entrou controller.GetAll")
+// Handler específico de Obtenção de todos os registros (com paginação)
+func (c *ClienteController) GetAll(ctx *gin.Context) {
+	c.log.Debug("Entrou controller.GetAll")
 
 	// Pega os parâmetros de paginação (page) da query string
 	page, err := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	if err != nil || page < 1 {
-		outputError(log, ctx, globalerr.ErrBadRequest, "GetAll/parse_size")
+		outputError(c.log, ctx, globalerr.ErrBadRequest, "GetAll/parse_size")
 		return
 	}
 
 	// Pega os parâmetros de paginação (size) da query string
 	size, err := strconv.Atoi(ctx.DefaultQuery("size", "10"))
 	if err != nil || size < 1 {
-		outputError(log, ctx, globalerr.ErrBadRequest, "GetAll/parse_size")
+		outputError(c.log, ctx, globalerr.ErrBadRequest, "GetAll/parse_size")
 		return
 	}
 
-	resp, err := useCase.Execute(int64(page), int64(size))
+	resp, err := c.getAllUC.Execute(int64(page), int64(size))
 	if err != nil {
-		outputError(log, ctx, err, "GetAll/usecase.Execute")
+		outputError(c.log, ctx, err, "GetAll/usecase.Execute")
 		return
 	}
 	ctx.JSON(http.StatusOK, resp)
-	log.Info("### Finished OK", "status_code", http.StatusOK)
+	c.log.Info("### Finished OK", "status_code", http.StatusOK)
 }
 
-// Update - Controlador para alterar um cliente pelo ID
-func Update(log logger.ILogger, ctx *gin.Context, useCase update.IUsecase) {
-	log.Debug("Entrou controller.Update")
-	id, err := getIdParam(log, ctx)
+// Handler específico de Atualização
+func (c *ClienteController) Update(ctx *gin.Context) {
+	c.log.Debug("Entrou controller.Update")
+	id, err := getIdParam(c.log, ctx)
 	if err != nil {
-		outputError(log, ctx, globalerr.ErrBadRequest, "Update/getIdParam")
+		outputError(c.log, ctx, globalerr.ErrBadRequest, "Update/getIdParam")
 		return
 	}
-	log.Debug("ID: " + id)
+	c.log.Debug("ID: " + id)
 	var input *dto.Request
 	err = json.NewDecoder(ctx.Request.Body).Decode(&input)
 	if err != nil {
-		outputError(log, ctx, err, "Update/json.NewDecoder")
+		outputError(c.log, ctx, err, "Update/json.NewDecoder")
 		return
 	}
-	resp, err := useCase.Execute(id, input)
+	resp, err := c.updateUC.Execute(id, input)
 	if err != nil {
-		outputError(log, ctx, err, "Update/usecase.Execute")
+		outputError(c.log, ctx, err, "Update/usecase.Execute")
 		return
 	}
 	ctx.JSON(http.StatusOK, resp)
-	log.Info("### Finished OK", "status_code", http.StatusOK)
+	c.log.Info("### Finished OK", "status_code", http.StatusOK)
 }
 
 func getIdParam(log logger.ILogger, ctx *gin.Context) (string, error) {

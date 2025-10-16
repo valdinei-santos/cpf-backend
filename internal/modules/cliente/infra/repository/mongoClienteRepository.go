@@ -22,8 +22,8 @@ type RepoClienteMongoDB struct {
 }
 
 // NewRepoClienteMongoDB - cria uma nova instância do repositório
-func NewRepoClienteMongoDB(client *mongo.Client, databaseName, collectionName string, l logger.ILogger) *RepoClienteMongoDB {
-	collection := client.Database(databaseName).Collection(collectionName)
+func NewRepoClienteMongoDB(db *mongo.Database, collectionName string, l logger.ILogger) *RepoClienteMongoDB {
+	collection := db.Collection(collectionName)
 	return &RepoClienteMongoDB{
 		collection: collection,
 		log:        l,

@@ -1,7 +1,6 @@
 package cliente
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/valdinei-santos/cpf-backend/internal/infra/logger"
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/infra/controller"
 	"github.com/valdinei-santos/cpf-backend/internal/modules/cliente/infra/repository"
@@ -13,42 +12,33 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// StartCreate - Metodo onde instanciamentos as dependencias e chamamos o controller
-func StartCreate(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou cliente.StartCreate")
-	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
-	u := create.NewUseCase(repo, log)
-	controller.Create(log, ctx, u)
+// ModuleCliente é uma estrutura que contém os controladores (handlers). Mudei para usar só um controller por módulo
+// para as rotas. Ela será criada uma única vez.
+type ModuleCliente struct {
+	Controller *controller.ClienteController
 }
 
-// StartDelete - Metodo onde instanciamentos as dependencias e chamamos o controller
-func StartDelete(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou cliente.StartDelete")
-	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
-	u := delete.NewUseCase(repo, log)
-	controller.Delete(log, ctx, u)
-}
+// NewModuleCliente - Inicializa TODAS as dependências do módulo uma única vez.
+func NewModuleCliente(log logger.ILogger, db *mongo.Database) *ModuleCliente {
+	log.Info("Inicializando Módulo Cliente...")
 
-// StartGet - Metodo onde instanciamentos as dependencias e chamamos o controller
-func StartGet(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou cliente.StartGet")
-	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
-	u := get.NewUseCase(repo, log)
-	controller.Get(log, ctx, u)
-}
+	repo := repository.NewRepoClienteMongoDB(db, "cliente", log)
+	createUC := create.NewUseCase(repo, log)
+	deleteUC := delete.NewUseCase(repo, log)
+	getUC := get.NewUseCase(repo, log)
+	getAllUC := getall.NewUseCase(repo, log)
+	updateUC := update.NewUseCase(repo, log)
 
-// StartGetAll - Metodo onde instanciamentos as dependencias e chamamos o controller
-func StartGetAll(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou cliente.StartGetAll")
-	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
-	u := getall.NewUseCase(repo, log)
-	controller.GetAll(log, ctx, u)
-}
+	clienteController := controller.NewClienteController(
+		log,
+		createUC,
+		deleteUC,
+		getUC,
+		getAllUC,
+		updateUC,
+	)
 
-// StartUpdate - Metodo onde instanciamentos as dependencias e chamamos o controller
-func StartUpdate(log logger.ILogger, ctx *gin.Context, db *mongo.Database) {
-	log.Debug("Entrou cliente.StartUpdate")
-	repo := repository.NewRepoClienteMongoDB(db.Client(), "cpf_management", "cliente", log)
-	u := update.NewUseCase(repo, log)
-	controller.Update(log, ctx, u)
+	return &ModuleCliente{
+		Controller: clienteController,
+	}
 }
